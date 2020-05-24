@@ -1,12 +1,10 @@
 'use strict';
 
 const data = {
-    "RU": [
-        {
+    "RU": [{
             "country": "Россия",
             "count": "144500000",
-            "cities": [
-                {
+            "cities": [{
                     "name": "Москва",
                     "count": "12615882",
                     "link": "https://ru.wikipedia.org/wiki/%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0"
@@ -42,13 +40,11 @@ const data = {
                     "link": "https://ru.wikipedia.org/wiki/%D0%92%D0%BE%D1%80%D0%BE%D0%BD%D0%B5%D0%B6"
                 }
             ]
-
         },
         {
             "country": "Германия",
-            "count": 82175684 ,
-            "cities": [
-                {
+            "count": 82175684,
+            "cities": [{
                     "name": "Берлин",
                     "count": "3613495",
                     "link": "https://ru.wikipedia.org/wiki/%D0%91%D0%B5%D1%80%D0%BB%D0%B8%D0%BD"
@@ -73,8 +69,7 @@ const data = {
         {
             "country": "Англия",
             "count": 53012456,
-            "cities": [
-                {
+            "cities": [{
                     "name": "Лондон",
                     "count": " 8869898",
                     "link": "https://ru.wikipedia.org/wiki/%D0%9B%D0%BE%D0%BD%D0%B4%D0%BE%D0%BD"
@@ -95,15 +90,12 @@ const data = {
                     "link": "https://ru.wikipedia.org/wiki/%D0%91%D1%80%D0%B8%D1%81%D1%82%D0%BE%D0%BB%D1%8C"
                 }
             ]
-
         }
     ],
-    "EN": [
-        {
+    "EN": [{
             "country": "Russia",
             "count": "144500000",
-            "cities": [
-                {
+            "cities": [{
                     "name": "Ryazan",
                     "count": "538962",
                     "link": "https://ru.wikipedia.org/wiki/%D0%A0%D1%8F%D0%B7%D0%B0%D0%BD%D1%8C"
@@ -143,9 +135,8 @@ const data = {
         },
         {
             "country": "Germany",
-            "count": 82175684 ,
-            "cities": [
-                {
+            "count": 82175684,
+            "cities": [{
                     "name": "Berlin",
                     "count": "3613495",
                     "link": "https://ru.wikipedia.org/wiki/%D0%91%D0%B5%D1%80%D0%BB%D0%B8%D0%BD"
@@ -170,8 +161,7 @@ const data = {
         {
             "country": "United Kingdom",
             "count": 53012456,
-            "cities": [
-                {
+            "cities": [{
                     "name": "London",
                     "count": " 8869898",
                     "link": "https://ru.wikipedia.org/wiki/%D0%9B%D0%BE%D0%BD%D0%B4%D0%BE%D0%BD"
@@ -195,12 +185,10 @@ const data = {
 
         }
     ],
-    "DE": [
-        {
+    "DE": [{
             "country": "Russland",
             "count": "144500000",
-            "cities": [
-                {
+            "cities": [{
                     "name": "Ryazan",
                     "count": "538962",
                     "link": "https://ru.wikipedia.org/wiki/%D0%A0%D1%8F%D0%B7%D0%B0%D0%BD%D1%8C"
@@ -240,9 +228,8 @@ const data = {
         },
         {
             "country": "Deutschland",
-            "count": 82175684 ,
-            "cities": [
-                {
+            "count": 82175684,
+            "cities": [{
                     "name": "Berlin",
                     "count": "3613495",
                     "link": "https://ru.wikipedia.org/wiki/%D0%91%D0%B5%D1%80%D0%BB%D0%B8%D0%BD"
@@ -267,8 +254,7 @@ const data = {
         {
             "country": "England",
             "count": 53012456,
-            "cities": [
-                {
+            "cities": [{
                     "name": "London",
                     "count": " 8869898",
                     "link": "https://ru.wikipedia.org/wiki/%D0%9B%D0%BE%D0%BD%D0%B4%D0%BE%D0%BD"
@@ -299,31 +285,31 @@ const selectCities = document.getElementById('select-cities');
 const dropdown = document.querySelector('.dropdown');
 const countryName = document.querySelectorAll('.dropdown-lists__country');
 const cityName = document.querySelectorAll('.dropdown-lists__city');
-// const countryBlock = document.querySelector('.dropdown-lists__countryBlock');
 const listDefault = document.querySelector('.dropdown-lists__list--default');
 const parentBlock = document.querySelector('.dropdown-lists__list');
+const listSelect = document.querySelector('.dropdown-lists__list--select');
 
-// Создание структуры
+// Создание структуры default
 const newDiv = () => {
-    const listDefault =  document.querySelector('.dropdown-lists__list--default');
+    const listDefault = document.querySelector('.dropdown-lists__list--default');
 
     const countryBlock = document.createElement('div');
     countryBlock.classList.add('dropdown-lists__countryBlock');
-    
-    const totalLine = document.createElement('div'); 
+
+    const totalLine = document.createElement('div');
     totalLine.classList.add('dropdown-lists__total-line');
-    
+
     const listsCountry = document.createElement('div');
     listsCountry.classList.add('dropdown-lists__country');
     const listsCount = document.createElement('div');
     listsCount.classList.add('dropdown-lists__count');
-    
+
     const newDivLine = () => {
-        const listsLine = document.createElement('div'); 
+        const listsLine = document.createElement('div');
         listsLine.classList.add('dropdown-lists__line');
 
         countryBlock.appendChild(listsLine);
-        
+
         const listsCity = document.createElement('div');
         listsCity.classList.add('dropdown-lists__city');
         const listsCount = document.createElement('div');
@@ -341,15 +327,46 @@ const newDiv = () => {
     newDivLine();
     newDivLine();
 
-}
+};
 
-// формирование списка
+// Создание структуры select
+const newDiv2 = (b) => {
+    const countryBlock = document.createElement('div');
+    countryBlock.classList.add('dropdown-lists__countryBlock');
+    const totalLine = document.createElement('div');
+    totalLine.classList.add('dropdown-lists__total-line');
+    const listsCountry = document.createElement('div');
+    listsCountry.classList.add('dropdown-lists__country');
+    const listsCount = document.createElement('div');
+    listsCount.classList.add('dropdown-lists__count');
+    const newDivLine = () => {
+        const listsLine = document.createElement('div');
+        listsLine.classList.add('dropdown-lists__line');
+
+        countryBlock.appendChild(listsLine);
+
+        const listsCity = document.createElement('div');
+        listsCity.classList.add('dropdown-lists__city');
+        const listsCount = document.createElement('div');
+        listsCount.classList.add('dropdown-lists__count');
+
+        listsLine.appendChild(listsCity);
+        listsLine.appendChild(listsCount);
+    };
+    listSelect.appendChild(countryBlock);
+    countryBlock.appendChild(totalLine);
+    totalLine.appendChild(listsCountry);
+    totalLine.appendChild(listsCount);
+    for (let i = 0; i < b; i++) {
+        newDivLine();
+    }
+};
+
+// формирование списка default
 const addList1 = () => {
     //Создаем блоки с городами и странами
-    for(let i = 0; i < data.RU.length ; i++){
+    for (let i = 0; i < data.RU.length; i++) {
         newDiv();
-        // let newBlock = countryBlock.cloneNode(true);
-        // listDefault.appendChild(newBlock);
     }
     // Получаем все div со странами
     const countryName = document.querySelectorAll('.dropdown-lists__country');
@@ -360,44 +377,90 @@ const addList1 = () => {
         el.textContent = data.RU[i].country;
     });
 
-    let z = 0; 
+    let z = 0;
     // Добавляем Названия городов    
-    for(let x = 0; x < data.RU.length ; x++) {
-        for(let y = 0; y <= 2; y++){ 
+    for (let x = 0; x < data.RU.length; x++) {
+        for (let y = 0; y <= 2; y++) {
             cityName[z].textContent = data.RU[x].cities[y].name;
-            z++;  
+            z++;
         }
     }
 };
 
-const addList2 = () => {
+// формирование списка select
+const addList2 = (a, b) => {
+    newDiv2(b);
+    const countryName = document.querySelector('.dropdown-lists__country');
+    countryName.textContent = data.RU[a].country;
+    const cityName = document.querySelectorAll('.dropdown-lists__city');
+    cityName.forEach((el, i) => {
+        el.textContent = data.RU[a].cities[i].name;
+    });
+
 
 };
-
 
 // EventListeners
 main.addEventListener('click', (event) => {
     let target = event.target;
-  
-    if(target === document.getElementById('select-cities')){
-        dropdown.classList.add('active-list');
-    addList1();
-    }
+    // click по inpit
+    if (target === document.getElementById('select-cities')) {
+        if (listDefault.classList.contains('active')) {
+            event.preventDefault();
+        } else {
+            dropdown.classList.add('active-list');
+            addList1();
+            listDefault.classList.add('active');
+        }
 
-    if(target.classList.contains('dropdown-lists__country')){
-        dropdown.classList.remove('active-list');
-        const removeList = () => {
-            const countryBlock = document.querySelectorAll('.dropdown-lists__countryBlock');
-            countryBlock.forEach(el => {
-                el.remove();
-            });
-        };
-        setTimeout(removeList, 500);
-        
+    }
+    // click по city
+    if (target.classList.contains('dropdown-lists__country')) {
+        listDefault.classList.remove('active');
+        if (listSelect.classList.contains('active')) {
+            dropdown.classList.remove('active-list');
+            const removeList = () => {
+
+                const countryBlock = document.querySelectorAll('.dropdown-lists__countryBlock');
+                countryBlock.forEach(el => {
+                    el.remove();
+                });
+                listSelect.style.display = 'none';
+                dropdown.classList.add('active-list');
+                addList1();
+                listDefault.classList.add('active');
+                listDefault.style.display = 'block';
+                listSelect.classList.remove('active');
+            };
+            setTimeout(removeList, 500);
+        } else {
+            dropdown.classList.remove('active-list');
+            const removeList = () => {
+                // listDefault.style.display = 'none';
+                const countryBlock = document.querySelectorAll('.dropdown-lists__countryBlock');
+                countryBlock.forEach(el => {
+                    el.remove();
+                });
+                listDefault.style.display = 'none';
+            };
+            setTimeout(removeList, 500);
+
+            let country = target.textContent;
+
+            const addList = () => {
+                let a;
+                for (let i = 0; i < data.RU.length; i++) {
+                    if (country === data.RU[i].country) {
+                        a = i;
+                    }
+                }
+                let b = data.RU[a].cities.length;
+                addList2(a, b);
+                dropdown.classList.add('active-list');
+            };
+            setTimeout(addList, 510);
+            listSelect.style.display = "block";
+            listSelect.classList.add('active');
+        }
     }
 });
-
-
-
-
-
