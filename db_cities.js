@@ -280,6 +280,7 @@ const data = {
     ]
 };
 
+const inputCities = document.querySelector('.input-cities');
 const main = document.querySelector('.main');
 const selectCities = document.getElementById('select-cities');
 const dropdown = document.querySelector('.dropdown');
@@ -288,6 +289,8 @@ const cityName = document.querySelectorAll('.dropdown-lists__city');
 const listDefault = document.querySelector('.dropdown-lists__list--default');
 const parentBlock = document.querySelector('.dropdown-lists__list');
 const listSelect = document.querySelector('.dropdown-lists__list--select');
+const listAutoComplete = document.querySelector('.dropdown-lists__list--autocomplete');
+
 
 // Создание структуры default
 const newDiv = () => {
@@ -317,7 +320,7 @@ const newDiv = () => {
 
         listsLine.appendChild(listsCity);
         listsLine.appendChild(listsCount);
-    }
+    };
 
     listDefault.appendChild(countryBlock);
     countryBlock.appendChild(totalLine);
@@ -326,7 +329,6 @@ const newDiv = () => {
     newDivLine();
     newDivLine();
     newDivLine();
-
 };
 
 // Создание структуры select
@@ -463,4 +465,22 @@ main.addEventListener('click', (event) => {
             listSelect.classList.add('active');
         }
     }
+});
+
+
+selectCities.addEventListener('input', () => {
+    let res = selectCities.value;
+    console.log(res);
+    const newDiv = document.createElement('div');
+    newDiv.classList.add('search_window');
+    inputCities.appendChild(newDiv);
+
+    let countres = [];
+
+    for (let i = 0; i < data.RU.length; i++) {
+
+        console.log(data.RU[i].country);
+    }
+
+
 });
