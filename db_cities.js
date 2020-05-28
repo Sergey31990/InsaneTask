@@ -470,7 +470,6 @@ main.addEventListener('click', (event) => {
 
 selectCities.addEventListener('input', () => {
     let res = selectCities.value;
-    console.log(res);
     const newDiv = document.createElement('div');
     newDiv.classList.add('search_window');
     inputCities.appendChild(newDiv);
@@ -478,9 +477,14 @@ selectCities.addEventListener('input', () => {
     let countres = [];
 
     for (let i = 0; i < data.RU.length; i++) {
-
         console.log(data.RU[i].country);
+        let f = data.RU[i].cities;
+        f.forEach((el, i)  => {
+            console.log(el.name);
+        });
     }
 
 
-});
+    });
+
+
