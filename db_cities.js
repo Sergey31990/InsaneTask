@@ -4,6 +4,7 @@ const data = {
     "RU": [{
             "country": "Россия",
             "count": "144500000",
+            "link": "https://ru.wikipedia.org/wiki/%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F",
             "cities": [{
                     "name": "Москва",
                     "count": "12615882",
@@ -44,6 +45,7 @@ const data = {
         {
             "country": "Германия",
             "count": 82175684,
+            "link": "https://ru.wikipedia.org/wiki/%D0%93%D0%B5%D1%80%D0%BC%D0%B0%D0%BD%D0%B8%D1%8F",
             "cities": [{
                     "name": "Берлин",
                     "count": "3613495",
@@ -69,6 +71,7 @@ const data = {
         {
             "country": "Англия",
             "count": 53012456,
+            "link": "https://ru.wikipedia.org/wiki/%D0%93%D0%B5%D1%80%D0%BC%D0%B0%D0%BD%D0%B8%D1%8F",
             "cities": [{
                     "name": "Лондон",
                     "count": " 8869898",
@@ -290,17 +293,22 @@ const listDefault = document.querySelector('.dropdown-lists__list--default');
 const parentBlock = document.querySelector('.dropdown-lists__list');
 const listSelect = document.querySelector('.dropdown-lists__list--select');
 const listAutoComplete = document.querySelector('.dropdown-lists__list--autocomplete');
+const label = document.querySelector('.label');
+const closeBtn = document.querySelector('.close-button');
+const button = document.querySelector('.button');
 let countres = [];
 
 for (let i = 0; i < data.RU.length; i++) {
-    countres.push(data.RU[i].country.toLowerCase());
-    let f = data.RU[i].cities;
-    f.forEach(el => {
-        countres.push(el.name.toLowerCase());
+    countres.push([data.RU[i].country.toLowerCase(), data.RU[i].link]);
+
+    let c = data.RU[i].cities;
+
+    c.forEach(el => {
+        countres.push([el.name.toLowerCase(), el.link]);
     });
+
 }
 console.log(countres);
-
 // Создание структуры default
 const newDiv = () => {
     const listDefault = document.querySelector('.dropdown-lists__list--default');
@@ -423,7 +431,11 @@ main.addEventListener('click', (event) => {
             addList1();
             listDefault.classList.add('active');
         }
-
+        label.classList.add('label_active');
+        closeBtn.style.opacity = '1';
+    } else if (target.classList.contains('main') || target.classList.contains('close-button')) {
+        label.classList.remove('label_active');
+        closeBtn.style.opacity = '0';
     }
     // click по city
     if (target.classList.contains('dropdown-lists__country')) {
@@ -447,7 +459,6 @@ main.addEventListener('click', (event) => {
         } else {
             dropdown.classList.remove('active-list');
             const removeList = () => {
-                // listDefault.style.display = 'none';
                 const countryBlock = document.querySelectorAll('.dropdown-lists__countryBlock');
                 countryBlock.forEach(el => {
                     el.remove();
@@ -474,28 +485,42 @@ main.addEventListener('click', (event) => {
             listSelect.classList.add('active');
         }
     }
+    // click по find
+    if (target.classList.contains('search_window')) {
+        selectCities.value = target.textContent;
+
+        countres.forEach((el, i) => {
+            if (target.textContent.toLowerCase() === el[0]) {
+                console.log(el[1]);
+                console.log(button.getAttribute('href'));
+                button.setAttribute('href', el[1]);
+            }
+        });
+
+        let searchWindow = document.querySelectorAll('.search_window');
+        searchWindow.forEach(el => {
+            el.remove();
+        });
+    }
+
 });
 
-selectCities.addEventListener('focus', (event) => {event.preventDefault();});
-// selectCities.addEventListener('input', () => {
-//     let res = selectCities.value.toLowerCase();
-//     const newDiv = document.createElement('div');
-//     newDiv.classList.add('search_window');
-//     inputCities.appendChild(newDiv);
-//     countres.forEach((el, i) => {
-//         if(el.substring(0, res.length) === res){
-//             newDiv.textContent = el[0].toUpperCase() + el.slice(1);
-//         }
-//     });
-    
-//     if(selectCities.value === ''){
-//         console.log(selectCities.value);
-//         let  searchWindow = document.querySelectorAll('.search_window');
-//         searchWindow.forEach(el => {
-//             el.remove();
-//         });
-        
-//     }
-//     });
+selectCities.addEventListener('input', () => {
+    let res = selectCities.value.toLowerCase();
+    const newDiv = document.createElement('div');
+    newDiv.classList.add('search_window');
+    inputCities.appendChild(newDiv);
+    countres.forEach((el, i) => {
+        if (el[0].substring(0, res.length) === res) {
+            newDiv.textContent = el[0][0].toUpperCase() + el[0].slice(1);
+        }
+    });
 
+    if (selectCities.value === '') {
+        let searchWindow = document.querySelectorAll('.search_window');
+        searchWindow.forEach(el => {
+            el.remove();
+        });
 
+    }
+});
