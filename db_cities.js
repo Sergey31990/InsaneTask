@@ -290,7 +290,16 @@ const listDefault = document.querySelector('.dropdown-lists__list--default');
 const parentBlock = document.querySelector('.dropdown-lists__list');
 const listSelect = document.querySelector('.dropdown-lists__list--select');
 const listAutoComplete = document.querySelector('.dropdown-lists__list--autocomplete');
+let countres = [];
 
+for (let i = 0; i < data.RU.length; i++) {
+    countres.push(data.RU[i].country.toLowerCase());
+    let f = data.RU[i].cities;
+    f.forEach(el => {
+        countres.push(el.name.toLowerCase());
+    });
+}
+console.log(countres);
 
 // Создание структуры default
 const newDiv = () => {
@@ -467,24 +476,26 @@ main.addEventListener('click', (event) => {
     }
 });
 
-
-selectCities.addEventListener('input', () => {
-    let res = selectCities.value;
-    const newDiv = document.createElement('div');
-    newDiv.classList.add('search_window');
-    inputCities.appendChild(newDiv);
-
-    let countres = [];
-
-    for (let i = 0; i < data.RU.length; i++) {
-        console.log(data.RU[i].country);
-        let f = data.RU[i].cities;
-        f.forEach((el, i)  => {
-            console.log(el.name);
-        });
-    }
-
-
-    });
+selectCities.addEventListener('focus', (event) => {event.preventDefault();});
+// selectCities.addEventListener('input', () => {
+//     let res = selectCities.value.toLowerCase();
+//     const newDiv = document.createElement('div');
+//     newDiv.classList.add('search_window');
+//     inputCities.appendChild(newDiv);
+//     countres.forEach((el, i) => {
+//         if(el.substring(0, res.length) === res){
+//             newDiv.textContent = el[0].toUpperCase() + el.slice(1);
+//         }
+//     });
+    
+//     if(selectCities.value === ''){
+//         console.log(selectCities.value);
+//         let  searchWindow = document.querySelectorAll('.search_window');
+//         searchWindow.forEach(el => {
+//             el.remove();
+//         });
+        
+//     }
+//     });
 
 

@@ -6,9 +6,9 @@
   list-style-type: none;
 }
 
-input:focus {
+/* input:focus {
   outline: none;
-}
+} */
 
 body {
   font-family: 'Roboto', sans-serif;
@@ -49,11 +49,11 @@ body .main .input-cities #select-cities {
   color: #00416A;
 }
 
-body .main .input-cities #select-cities:focus~.label {
+/* body .main .input-cities #select-cities:focus~.label {
   top: -25px;
   left: 0;
   color: #00416A;
-}
+} */
 
 body .main .input-cities .close-button {
   position: absolute;
@@ -171,7 +171,7 @@ body .main .input-cities label {
   margin: 10px 0;
 }
 
-#select-cities~.focus-border:before,
+/* #select-cities~.focus-border:before,
 #select-cities~.focus-border:after {
   content: "";
   position: absolute;
@@ -182,16 +182,16 @@ body .main .input-cities label {
   background-color: #00416A;
   -webkit-transition: 0.3s;
   transition: 0.3s;
-}
+} */
 
-#select-cities~.focus-border:after {
+/* #select-cities~.focus-border:after {
   top: auto;
   bottom: 0;
   left: auto;
   right: 0;
-}
+} */
 
-#select-cities~.focus-border i:before,
+/* #select-cities~.focus-border i:before,
 #select-cities~.focus-border i:after {
   content: "";
   position: absolute;
@@ -202,16 +202,16 @@ body .main .input-cities label {
   background-color: #00416A;
   -webkit-transition: 0.4s;
   transition: 0.4s;
-}
+} */
 
-#select-cities~.focus-border i:after {
+/* #select-cities~.focus-border i:after {
   left: auto;
   right: 0;
   top: auto;
   bottom: 0;
-}
+} */
 
-#select-cities:focus~.focus-border:before,
+/* #select-cities:focus~.focus-border:before,
 #select-cities:focus~.focus-border:after {
   width: 100%;
   -webkit-transition: 0.3s;
@@ -223,7 +223,7 @@ body .main .input-cities label {
   height: 100%;
   -webkit-transition: 0.4s;
   transition: 0.4s;
-}
+} */
 
 /*# sourceMappingURL=style.css.map */
 
@@ -238,4 +238,6 @@ body .main .input-cities label {
   border: 2px solid black;
   bottom: -50px;
   background: #c9cdf9;
+  padding: 0px 14px;
+  line-height: 50px;
 }
