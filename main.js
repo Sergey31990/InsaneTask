@@ -75,14 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const newDivLine = () => {
                 const listsLine = document.createElement("div");
                 listsLine.classList.add("dropdown-lists__line");
-
                 countryBlock.appendChild(listsLine);
-
                 const listsCity = document.createElement("div");
                 listsCity.classList.add("dropdown-lists__city");
                 const listsCount = document.createElement("div");
                 listsCount.classList.add("dropdown-lists__count");
-
                 listsLine.appendChild(listsCity);
                 listsLine.appendChild(listsCount);
             };
@@ -140,13 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Добавляем Названия стран
             countryName.forEach((el, i) => {
                 el.textContent = this.data.RU[i].country;
+                el.nextSibling.textContent = this.data.RU[i].count;
             });
-
+           
             let z = 0;
             // Добавляем Названия городов
             for (let x = 0; x < this.data.RU.length; x++) {
                 for (let y = 0; y <= 2; y++) {
                     cityName[z].textContent = this.data.RU[x].cities[y].name;
+                    cityName[z].nextSibling.textContent = this.data.RU[x].cities[y].count;
                     z++;
                 }
             }
@@ -161,7 +160,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.textContent = this.data.RU[a].cities[i].name;
             });
         }
-
+        // Добавить url в link
+        addLink(target){
+            this.countres.forEach((el, i) => {
+                if (target.textContent.toLowerCase() === el[0]) {
+                    button.setAttribute("href", el[1]);
+                }
+            });
+        }
         addEventListeners() {
             main.addEventListener("click", (event) => {
                 let target = event.target;
@@ -176,14 +182,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     label.classList.add("label_active");
                     closeBtn.style.opacity = "1";
-                } else if (
-                    target.classList.contains("main") ||
-                    target.classList.contains("close-button")
-                ) {
+                } else if (target.classList.contains("main") || target.classList.contains("close-button")) {
                     label.classList.remove("label_active");
                     closeBtn.style.opacity = "0";
+                    selectCities.value = '';
+                    button.setAttribute("href", '');
+                    button.classList.add('disabled');
                 }
-                // click по city
+                // click по country
                 if (target.classList.contains("dropdown-lists__country")) {
                     listDefault.classList.remove("active");
                     if (listSelect.classList.contains("active")) {
@@ -230,20 +236,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         listSelect.style.display = "block";
                         listSelect.classList.add("active");
                     }
+                    label.classList.add('label_active');
+                    selectCities.value = target.textContent;
+                    button.classList.remove('disabled');
+                    this.addLink(target);
+                }
+                // click по city
+                if (target.classList.contains("dropdown-lists__city")) {
+                    selectCities.value = target.textContent;
+                    button.classList.remove('disabled');
+                    label.classList.add('label_active');
+                    this.addLink(target);
                 }
                 // click по find
                 if (target.classList.contains("search_window")) {
                     selectCities.value = target.textContent;
-                    countres.forEach((el, i) => {
-                        if (target.textContent.toLowerCase() === el[0]) {
-                            button.setAttribute("href", el[1]);
-                        }
-                    });
-
+                    this.addLink(target);
                     let searchWindow = document.querySelectorAll(".search_window");
                     searchWindow.forEach((el) => {
                         el.remove();
                     });
+                    button.classList.remove('disabled');
                 }
                 // событие input
                 selectCities.addEventListener("input", () => {
@@ -251,18 +264,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     const searchWindow = document.querySelector('.search_window');
 
                     if (searchWindow) {
-                        let flag;
-                        this.countres.forEach((el, i) => {
-                            if (el[0].substring(0, res.length) === res) {
-                                flag = true;
-                                return;
-                                // searchWindow.textContent = el[0][0].toUpperCase() + el[0].slice(1);
-                            } else {
-                                flag = false;
-                                // searchWindow.textContent = 'хрен всем в бухту';
-                            }
-                        });
-                        console.log(flag);
+                       
+                    let findOk ;
+                       const find = (el) => {
+                           if(el[0].substring(0, res.length) === res){
+                              findOk = el[0][0].toUpperCase() + el[0].slice(1);
+                                return true;
+                           }else{
+                               return false;
+                           }
+                       };
+                        
+                      if(this.countres.some(find)){
+                        searchWindow.textContent = findOk;
+                      }else{
+                        searchWindow.textContent = 'Совпадения не найдены';
+                      }
+    
                     } else {
                         const newDiv = document.createElement("div");
                         newDiv.classList.add("search_window");
@@ -273,13 +291,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (selectCities.value === "") {
                         let searchWindow = document.querySelector(".search_window");
                         searchWindow.remove();
+                        button.classList.add('disabled');
                     }
                 });
+                
             });
         }
     }
 
     let appData = new AppData();
     appData.getData();
-
+    console.log(appData.countres);
 });
