@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
     const inputCities = document.querySelector(".input-cities");
+    const popup = document.querySelector(".popup");
     const main = document.querySelector(".main");
     const selectCities = document.getElementById("select-cities");
     const dropdown = document.querySelector(".dropdown");
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.querySelector(".close-button");
     const button = document.querySelector(".button");
     let countres = [];
+    let lang = 'RU';
 
     class AppData {
         constructor() {
@@ -40,23 +42,23 @@ document.addEventListener('DOMContentLoaded', () => {
             request.addEventListener("readystatechange", (event) => {
                 if (request.readyState === 4 && request.status === 200) {
                     this.data = JSON.parse(request.responseText);
-                    this.createCountres();
                     this.addEventListeners();
                 }
             });
         }
         // Записываем города и страны в countres
-        createCountres() {
-            for (let i = 0; i < this.data.RU.length; i++) {
+        createCountres() {  
+            for (let i = 0; i < this.data[`${lang}`].length; i++) {
                 this.countres.push([
-                    this.data.RU[i].country.toLowerCase(),
-                    this.data.RU[i].link,
+                    this.data[`${lang}`][i].country.toLowerCase(),
+                    this.data[`${lang}`][i].link,
                 ]);
-                let c = this.data.RU[i].cities;
+                let c = this.data[`${lang}`][i].cities;
                 c.forEach((el) => {
                     this.countres.push([el.name.toLowerCase(), el.link]);
                 });
             }
+            console.log(this.countres);
         }
         // Создаем структуру для списка Default
         createDefault() {
@@ -127,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Заполняем Default
         addList1() {
             //Создаем блоки с городами и странами
-            for (let i = 0; i < this.data.RU.length; i++) {
+            for (let i = 0; i < this.data[`${lang}`].length; i++) {
                 this.createDefault();
             }
             // Получаем все div со странами
@@ -136,16 +138,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const cityName = document.querySelectorAll(".dropdown-lists__city");
             // Добавляем Названия стран
             countryName.forEach((el, i) => {
-                el.textContent = this.data.RU[i].country;
-                el.nextSibling.textContent = this.data.RU[i].count;
+                el.textContent = this.data[`${lang}`][i].country;
+                el.nextSibling.textContent = this.data[`${lang}`][i].count;
             });
            
             let z = 0;
             // Добавляем Названия городов
-            for (let x = 0; x < this.data.RU.length; x++) {
+            for (let x = 0; x < this.data[`${lang}`].length; x++) {
                 for (let y = 0; y <= 2; y++) {
-                    cityName[z].textContent = this.data.RU[x].cities[y].name;
-                    cityName[z].nextSibling.textContent = this.data.RU[x].cities[y].count;
+                    cityName[z].textContent = this.data[`${lang}`][x].cities[y].name;
+                    cityName[z].nextSibling.textContent = this.data[`${lang}`][x].cities[y].count;
                     z++;
                 }
             }
@@ -154,10 +156,10 @@ document.addEventListener('DOMContentLoaded', () => {
         addList2(a, b) {
             this.createSelect(b);
             const countryName = document.querySelector(".dropdown-lists__country");
-            countryName.textContent = this.data.RU[a].country;
+            countryName.textContent = this.data[`${lang}`][a].country;
             const cityName = document.querySelectorAll(".dropdown-lists__city");
             cityName.forEach((el, i) => {
-                el.textContent = this.data.RU[a].cities[i].name;
+                el.textContent = this.data[`${lang}`][a].cities[i].name;
             });
         }
         // Добавить url в link
@@ -171,6 +173,19 @@ document.addEventListener('DOMContentLoaded', () => {
         addEventListeners() {
             main.addEventListener("click", (event) => {
                 let target = event.target;
+                // click по popup
+                if(target.classList.contains('btn')){
+                    popup.style.transform = 'translateX(-100%)';
+                }
+                if (target.classList.contains('EN')){
+                    lang = 'EN';
+                    this.createCountres();
+                } else if (target.classList.contains('DE')){
+                    lang = 'DE';
+                    this.createCountres();
+                }
+
+
                 // click по inpit
                 if (target === document.getElementById("select-cities")) {
                     if (listDefault.classList.contains("active")) {
@@ -223,12 +238,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const addList = () => {
                             let a;
-                            for (let i = 0; i < this.data.RU.length; i++) {
-                                if (country === this.data.RU[i].country) {
+                            for (let i = 0; i < this.data[`${lang}`].length; i++) {
+                                if (country === this.data[`${lang}`][i].country) {
                                     a = i;
                                 }
                             }
-                            let b = this.data.RU[a].cities.length;
+                            let b = this.data[`${lang}`][a].cities.length;
                             this.addList2(a, b);
                             dropdown.classList.add("active-list");
                         };
@@ -301,5 +316,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let appData = new AppData();
     appData.getData();
-    console.log(appData.countres);
 });
