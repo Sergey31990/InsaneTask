@@ -26,12 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.querySelector(".close-button");
     const button = document.querySelector(".button");
     let countres = [];
-    let lang = 'RU';
+    let lang;
 
     class AppData {
         constructor() {
             this.data = 0;
             this.countres = [];
+        }
+        getLocalStorage() {
+            if (localStorage.data) {
+                this.data = JSON.parse(localStorage.data);
+                this.getCookie();
+                this.addEventListeners();
+            } else {
+                this.getData();
+            }
         }
         // Получаем данные с сервера
         getData() {
@@ -42,12 +51,36 @@ document.addEventListener('DOMContentLoaded', () => {
             request.addEventListener("readystatechange", (event) => {
                 if (request.readyState === 4 && request.status === 200) {
                     this.data = JSON.parse(request.responseText);
+                    localStorage.data = request.responseText;
                     this.addEventListeners();
                 }
             });
+            this.getCookie();
+        }
+        // Получаем cookie, если нет запускаем SetCookie
+        getCookie() {
+            function getCookies(name) {
+                let matches = document.cookie.match(new RegExp(
+                    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+                ));
+                return matches ? decodeURIComponent(matches[1]) : undefined;
+            }
+            if (getCookies(encodeURIComponent('lang')) === undefined) {
+
+            } else {
+                popup.style.display = 'none';
+                lang = getCookies(encodeURIComponent('lang'));
+            }
+            console.log(document.cookie);
+        }
+        setCookie(name, value) {
+            let updatedCookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
+
+            document.cookie = `${updatedCookie};max-age=260000`;
+            console.log(updatedCookie);
         }
         // Записываем города и страны в countres
-        createCountres() {  
+        createCountres() {
             for (let i = 0; i < this.data[`${lang}`].length; i++) {
                 this.countres.push([
                     this.data[`${lang}`][i].country.toLowerCase(),
@@ -58,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     this.countres.push([el.name.toLowerCase(), el.link]);
                 });
             }
-            console.log(this.countres);
         }
         // Создаем структуру для списка Default
         createDefault() {
@@ -141,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.textContent = this.data[`${lang}`][i].country;
                 el.nextSibling.textContent = this.data[`${lang}`][i].count;
             });
-           
+
             let z = 0;
             // Добавляем Названия городов
             for (let x = 0; x < this.data[`${lang}`].length; x++) {
@@ -163,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         // Добавить url в link
-        addLink(target){
+        addLink(target) {
             this.countres.forEach((el, i) => {
                 if (target.textContent.toLowerCase() === el[0]) {
                     button.setAttribute("href", el[1]);
@@ -174,15 +206,22 @@ document.addEventListener('DOMContentLoaded', () => {
             main.addEventListener("click", (event) => {
                 let target = event.target;
                 // click по popup
-                if(target.classList.contains('btn')){
+                if (target.classList.contains('btn')) {
                     popup.style.transform = 'translateX(-100%)';
-                }
-                if (target.classList.contains('EN')){
-                    lang = 'EN';
-                    this.createCountres();
-                } else if (target.classList.contains('DE')){
-                    lang = 'DE';
-                    this.createCountres();
+
+                    if (target.classList.contains('EN')) {
+                        lang = 'EN';
+                        this.setCookie('lang', 'EN');
+                        this.createCountres();
+                    } else if (target.classList.contains('DE')) {
+                        lang = 'DE';
+                        this.setCookie('lang', 'DE');
+                        this.createCountres();
+                    } else if (target.classList.contains('RU')) {
+                        lang = 'RU';
+                        this.setCookie('lang', 'RU');
+                        this.createCountres();
+                    }
                 }
 
 
@@ -279,23 +318,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     const searchWindow = document.querySelector('.search_window');
 
                     if (searchWindow) {
-                       
-                    let findOk ;
-                       const find = (el) => {
-                           if(el[0].substring(0, res.length) === res){
-                              findOk = el[0][0].toUpperCase() + el[0].slice(1);
+
+                        let findOk;
+                        const find = (el) => {
+                            if (el[0].substring(0, res.length) === res) {
+                                findOk = el[0][0].toUpperCase() + el[0].slice(1);
                                 return true;
-                           }else{
-                               return false;
-                           }
-                       };
-                        
-                      if(this.countres.some(find)){
-                        searchWindow.textContent = findOk;
-                      }else{
-                        searchWindow.textContent = 'Совпадения не найдены';
-                      }
-    
+                            } else {
+                                return false;
+                            }
+                        };
+
+                        if (this.countres.some(find)) {
+                            searchWindow.textContent = findOk;
+                        } else {
+                            searchWindow.textContent = 'Совпадения не найдены';
+                        }
+
                     } else {
                         const newDiv = document.createElement("div");
                         newDiv.classList.add("search_window");
@@ -309,11 +348,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         button.classList.add('disabled');
                     }
                 });
-                
+
             });
         }
     }
 
     let appData = new AppData();
-    appData.getData();
+    appData.getLocalStorage();
+
+    // document.cookie = "lang=RU; max-age=0";
 });
